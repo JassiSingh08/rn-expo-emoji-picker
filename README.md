@@ -40,7 +40,7 @@ The picker's core is pure JS — in a bare React Native app, install and import 
 The optional **native row renderer** is an Expo Module, so it needs the Expo Modules runtime in your app. One-time setup:
 
 ```sh
-npx install-expo-modules
+npx install-expo-modules@latest
 ```
 
 After that, the `/native` and `/legend-native` entries link automatically on the next build. Without it they still work — they detect the missing module and fall back to the JS rows (with a one-time `console.warn` in development).
