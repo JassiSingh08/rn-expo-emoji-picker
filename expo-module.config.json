@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["RNSEmogiRowModule"]
+  },
+  "android": {
+    "modules": ["com.rnsemogipicker.RNSEmogiRowModule"]
+  }
+}

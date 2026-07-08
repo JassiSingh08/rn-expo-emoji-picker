@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Emogi Picker Example",
+    "slug": "rn-s-emogi-picker-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jass08.rnsemogipickerexample",
+      "appleTeamId": "WG3G5J6V8M"
+    },
+    "android": {
+      "package": "com.jass08.rnsemogipickerexample"
+    }
+  }
+}

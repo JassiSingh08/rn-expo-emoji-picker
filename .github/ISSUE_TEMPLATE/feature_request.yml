@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest an idea
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API / behavior
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Fits the project constraints
+      options:
+        - label: This keeps core 100% JS (no native modules) and engine-agnostic
+          required: true

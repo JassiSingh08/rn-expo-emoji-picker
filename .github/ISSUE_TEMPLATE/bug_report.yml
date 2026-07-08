@@ -1,0 +1,51 @@
+name: Bug report
+description: Something is broken
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This library **requires the React Native New Architecture**. Bugs that only reproduce on the legacy architecture will be closed (use the `/flatlist` entry point there, at reduced performance).
+  - type: input
+    id: version
+    attributes:
+      label: rn-s-emogi-picker version
+    validations:
+      required: true
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Entry point / engine
+      options:
+        - rn-s-emogi-picker (FlashList v2)
+        - rn-s-emogi-picker/legend (LegendList)
+        - rn-s-emogi-picker/flatlist (FlatList)
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "RN 0.81 / Expo SDK 54, iOS 18 / Android 15, new arch: yes"
+    validations:
+      required: true
+  - type: checkboxes
+    id: newarch
+    attributes:
+      label: New Architecture
+      options:
+        - label: I confirm the New Architecture is enabled in my app
+          required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal code + steps. A snack or repro repo gets fixed fastest.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations:
+      required: true

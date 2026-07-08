@@ -1,0 +1,15 @@
+node_modules/
+lib/
+.DS_Store
+*.log
+.expo/
+dist/
+
+example/android
+example/ios
+
+# native build caches/outputs (created when the example builds the module)
+android/build/
+.gradle/
+.kotlin/
+ios/build/

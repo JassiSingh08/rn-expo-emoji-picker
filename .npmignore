@@ -1,0 +1,13 @@
+# The "files" whitelist in package.json is the source of truth for what ships.
+# This file is a safety net in case "files" is ever removed.
+example/
+scripts/
+.github/
+.expo/
+*.log
+.DS_Store
+tsconfig*.json
+CONTRIBUTING.md
+android/build/
+android/.gradle/
+ios/build/

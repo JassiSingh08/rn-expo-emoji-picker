@@ -1,0 +1,158 @@
+{
+  "name": "rn-s-emogi-picker",
+  "version": "0.1.0",
+  "description": "Buttery-smooth emoji picker for React Native's New Architecture. 100% JS, swappable list engine: FlashList v2 by default, LegendList or FlatList via subpath imports.",
+  "main": "./lib/commonjs/index.js",
+  "module": "./lib/module/index.js",
+  "types": "./lib/typescript/commonjs/src/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.tsx",
+      "import": {
+        "types": "./lib/typescript/module/src/index.d.ts",
+        "default": "./lib/module/index.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/index.d.ts",
+        "default": "./lib/commonjs/index.js"
+      }
+    },
+    "./legend": {
+      "source": "./src/legend.tsx",
+      "import": {
+        "types": "./lib/typescript/module/src/legend.d.ts",
+        "default": "./lib/module/legend.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/legend.d.ts",
+        "default": "./lib/commonjs/legend.js"
+      }
+    },
+    "./flatlist": {
+      "source": "./src/flatlist.tsx",
+      "import": {
+        "types": "./lib/typescript/module/src/flatlist.d.ts",
+        "default": "./lib/module/flatlist.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/flatlist.d.ts",
+        "default": "./lib/commonjs/flatlist.js"
+      }
+    },
+    "./native": {
+      "source": "./src/native.tsx",
+      "import": {
+        "types": "./lib/typescript/module/src/native.d.ts",
+        "default": "./lib/module/native.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/native.d.ts",
+        "default": "./lib/commonjs/native.js"
+      }
+    },
+    "./legend-native": {
+      "source": "./src/legend-native.tsx",
+      "import": {
+        "types": "./lib/typescript/module/src/legend-native.d.ts",
+        "default": "./lib/module/legend-native.js"
+      },
+      "require": {
+        "types": "./lib/typescript/commonjs/src/legend-native.d.ts",
+        "default": "./lib/commonjs/legend-native.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "expo-module.config.json",
+    "!android/build",
+    "!**/__tests__",
+    "!**/.*",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build-data": "node scripts/build-data.mjs",
+    "typecheck": "tsc --noEmit",
+    "clean": "del-cli lib",
+    "prepare": "bob build",
+    "prepack": "bob build"
+  },
+  "keywords": [
+    "react-native",
+    "emoji",
+    "emoji-picker",
+    "flashlist",
+    "legend-list",
+    "expo",
+    "new-architecture",
+    "emoji-keyboard",
+    "ios",
+    "android"
+  ],
+  "author": "Jass <singhjassi693@gmail.com> (Scanner Techs)",
+  "license": "MIT",
+  "homepage": "https://github.com/scanner-techs/rn-s-emogi-picker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scanner-techs/rn-s-emogi-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scanner-techs/rn-s-emogi-picker/issues"
+  },
+  "peerDependencies": {
+    "@legendapp/list": ">=3.0.0",
+    "@shopify/flash-list": ">=2.0.0",
+    "expo-modules-core": "*",
+    "react": ">=19.0.0",
+    "react-native": ">=0.79.0"
+  },
+  "peerDependenciesMeta": {
+    "@legendapp/list": {
+      "optional": true
+    },
+    "@shopify/flash-list": {
+      "optional": true
+    },
+    "expo-modules-core": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@legendapp/list": "^3.3.2",
+    "@shopify/flash-list": "^2.3.2",
+    "@types/react": "^19.1.0",
+    "del-cli": "^6.0.0",
+    "emojilib": "^4.0.3",
+    "expo-modules-core": "^57.0.3",
+    "react": "^19.1.4",
+    "react-native": "^0.81.0",
+    "react-native-builder-bob": "^0.43.0",
+    "typescript": "^5.8.0",
+    "unicode-emoji-json": "^0.9.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "commonjs",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
+      "typescript"
+    ]
+  }
+}
