@@ -322,14 +322,12 @@ In dev builds, each row is drawn by **one native view** (Expo Modules — UIKit 
 
 #### Measured difference
 
-**Release build**, 4-year-old Android phone, identical FlashList and data (238 rows / 1,904 emoji), auto-fling at 4× finger speed. Reproduce it yourself with the example app's benchmark screen:
+**Release build**, 2021 Android phone, identical FlashList and data (238 rows / 1,904 emoji), auto-fling at 4× finger speed. Reproduce it yourself with the example app's benchmark screen:
 
 | | JS rows | Native rows | |
 | --- | --- | --- | --- |
 | Scroll — JS FPS (avg / min) | 11.9 / 10.7 | **58.4 / 58.2** | **~5× faster** |
 | Full-list jump — paint (avg / max) | 349 / 382 ms | 312 / 332 ms | ~10% faster |
-
-The honest read: on flagship devices both paths hold 60fps — the native renderer is for the low-end half of your user base, where JS row re-binding starves the JS thread under fast flings. Cold jumps improve only ~10% because mounting a fresh window of rows dominates either way.
 
 ## Example app
 
