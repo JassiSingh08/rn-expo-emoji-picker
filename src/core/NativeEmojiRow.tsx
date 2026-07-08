@@ -23,8 +23,8 @@ interface NativeRowViewProps {
 // renderer — same picker, best available rendering.
 let NativeRowView: ComponentType<NativeRowViewProps> | null = null;
 try {
-  if (requireOptionalNativeModule('RNSEmogiRow') != null) {
-    NativeRowView = requireNativeViewManager<NativeRowViewProps>('RNSEmogiRow');
+  if (requireOptionalNativeModule('RNExpoEmojiRow') != null) {
+    NativeRowView = requireNativeViewManager<NativeRowViewProps>('RNExpoEmojiRow');
   }
 } catch {
   NativeRowView = null;
@@ -34,13 +34,13 @@ if (NativeRowView == null && __DEV__) {
   // Loud in dev so a missing module is never mistaken for the fast path —
   // expected in Expo Go, a rebuild reminder everywhere else.
   console.warn(
-    '[rn-s-emogi-picker] Native row module not linked — using JS rows. ' +
+    '[rn-expo-emoji-picker] Native row module not linked — using JS rows. ' +
       'Expected in Expo Go; in a dev build, rebuild the native app ' +
       '(expo run:ios / run:android) after installing.'
   );
 }
 
-/** True when the RNSEmogiRow native view is linked into this build. */
+/** True when the RNExpoEmojiRow native view is linked into this build. */
 export const isNativeEmojiRowAvailable = NativeRowView != null;
 
 /**

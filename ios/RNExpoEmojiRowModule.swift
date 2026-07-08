@@ -41,9 +41,9 @@ class EmojiRowView: ExpoView {
   }
 }
 
-public class RNSEmogiRowModule: Module {
+public class RNExpoEmojiRowModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("RNSEmogiRow")
+    Name("RNExpoEmojiRow")
 
     View(EmojiRowView.self) {
       Prop("glyphs") { (view: EmojiRowView, glyphs: [String]) in

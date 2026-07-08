@@ -1,10 +1,12 @@
-# rn-s-emogi-picker
+# rn-expo-emoji-picker
 
 [![New Architecture Only](https://img.shields.io/badge/New%20Architecture-required-blue)](https://reactnative.dev/architecture/landing-page)
 [![Expo SDK 53 / 54](https://img.shields.io/badge/Expo-SDK%2053%20%2F%2054-lightgrey)](https://expo.dev)
 [![MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 Buttery-smooth emoji picker for React Native, built for the **New Architecture** with a **swappable list engine** (FlashList v2 by default, LegendList or FlatList via subpath imports) and an optional **native row renderer** for dev builds.
+
+Works in **any New-Architecture React Native app — Expo is not required**. The name reflects the first-class Expo support: the native row renderer is an Expo Module, and every entry degrades gracefully in Expo Go.
 
 > ⚠️ **This library requires the React Native New Architecture.** Expo SDK 53 and 54 enable it by default, so most apps need to do nothing. The default FlashList v2 engine is itself New-Arch-only.
 
@@ -22,9 +24,9 @@ Buttery-smooth emoji picker for React Native, built for the **New Architecture**
 ## Install
 
 ```sh
-npm install rn-s-emogi-picker @shopify/flash-list
+npm install rn-expo-emoji-picker @shopify/flash-list
 # or, if you prefer LegendList as the engine:
-npm install rn-s-emogi-picker @legendapp/list
+npm install rn-expo-emoji-picker @legendapp/list
 ```
 
 `@shopify/flash-list` and `@legendapp/list` are **optional peer dependencies** — install only the one that matches the entry point you import. The `/flatlist` entry point needs neither. The native row renderer ships **inside this package** (Expo Modules) — nothing extra to install; it links automatically in any dev build when you import a `/native` entry.
@@ -34,7 +36,7 @@ Requirements: `react >= 19`, `react-native >= 0.79` (Expo SDK 53/54), New Archit
 ## Quick start
 
 ```tsx
-import { EmojiPicker } from 'rn-s-emogi-picker';
+import { EmojiPicker } from 'rn-expo-emoji-picker';
 
 export function MyScreen() {
   return (
@@ -57,18 +59,18 @@ All picker logic lives behind an engine-agnostic adapter contract. Each entry po
 
 | Import | Engine | Install | Notes |
 | --- | --- | --- | --- |
-| `rn-s-emogi-picker` | [FlashList v2](https://shopify.github.io/flash-list/) | `@shopify/flash-list@^2` | **Default & recommended.** New-Arch-only, JS-only, auto-measuring, recycling item pools. |
-| `rn-s-emogi-picker/legend` | [LegendList v3](https://legendapp.com/open-source/list/) | `@legendapp/list@^3` | New-Arch-optimized, JS-only. The adapter enables `recycleItems` (LegendList does not recycle by default) and passes an exact `estimatedItemSize`. |
-| `rn-s-emogi-picker/flatlist` | React Native FlatList | — | Fallback for apps stuck on the legacy architecture. Reduced performance, no sticky headers. |
-| `rn-s-emogi-picker/native` | FlashList v2 + **native rows** | `@shopify/flash-list@^2` + a dev build | FlashList engine with each row drawn as ONE native view (Expo Modules). Falls back to JS rows automatically when the native module isn't linked (Expo Go), so it's always safe to import in an Expo app. |
-| `rn-s-emogi-picker/legend-native` | LegendList + **native rows** | `@legendapp/list@^3` + a dev build | The same native row renderer and fallback, on the LegendList engine. |
+| `rn-expo-emoji-picker` | [FlashList v2](https://shopify.github.io/flash-list/) | `@shopify/flash-list@^2` | **Default & recommended.** New-Arch-only, JS-only, auto-measuring, recycling item pools. |
+| `rn-expo-emoji-picker/legend` | [LegendList v3](https://legendapp.com/open-source/list/) | `@legendapp/list@^3` | New-Arch-optimized, JS-only. The adapter enables `recycleItems` (LegendList does not recycle by default) and passes an exact `estimatedItemSize`. |
+| `rn-expo-emoji-picker/flatlist` | React Native FlatList | — | Fallback for apps stuck on the legacy architecture. Reduced performance, no sticky headers. |
+| `rn-expo-emoji-picker/native` | FlashList v2 + **native rows** | `@shopify/flash-list@^2` + a dev build | FlashList engine with each row drawn as ONE native view (Expo Modules). Falls back to JS rows automatically when the native module isn't linked (Expo Go), so it's always safe to import in an Expo app. |
+| `rn-expo-emoji-picker/legend-native` | LegendList + **native rows** | `@legendapp/list@^3` + a dev build | The same native row renderer and fallback, on the LegendList engine. |
 
 ```tsx
-import { EmojiPicker } from 'rn-s-emogi-picker';               // FlashList v2
-import { EmojiPicker } from 'rn-s-emogi-picker/legend';        // LegendList
-import { EmojiPicker } from 'rn-s-emogi-picker/flatlist';      // FlatList fallback
-import { EmojiPicker } from 'rn-s-emogi-picker/native';        // FlashList + native rows
-import { EmojiPicker } from 'rn-s-emogi-picker/legend-native'; // LegendList + native rows
+import { EmojiPicker } from 'rn-expo-emoji-picker';               // FlashList v2
+import { EmojiPicker } from 'rn-expo-emoji-picker/legend';        // LegendList
+import { EmojiPicker } from 'rn-expo-emoji-picker/flatlist';      // FlatList fallback
+import { EmojiPicker } from 'rn-expo-emoji-picker/native';        // FlashList + native rows
+import { EmojiPicker } from 'rn-expo-emoji-picker/legend-native'; // LegendList + native rows
 ```
 
 How to pick:
@@ -95,7 +97,7 @@ You can even bring your own engine: `createEmojiPicker(MyEngine)` is exported, t
 | `enableRecentlyUsed` | `boolean` | `true` | Show the recently-used section. |
 | `recentlyUsedLimit` | `number` | `16` | Max emoji in the recents section. |
 | `storage` | `EmojiPickerStorage` | in-memory | Persistence for recents — see below. |
-| `storageKey` | `string` | `'rn-s-emogi-picker:recents'` | Storage key for recents. |
+| `storageKey` | `string` | `'rn-expo-emoji-picker:recents'` | Storage key for recents. |
 | `enableSkinToneSelector` | `boolean` | `true` | Show the global skin tone button. |
 | `skinTone` | `SkinTone` | — | Controlled skin tone (`'default' \| 'light' \| 'medium_light' \| 'medium' \| 'medium_dark' \| 'dark'`). |
 | `defaultSkinTone` | `SkinTone` | `'default'` | Initial tone when uncontrolled. |
@@ -134,7 +136,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 ```tsx
 import { MMKV } from 'react-native-mmkv';
-import type { EmojiPickerStorage } from 'rn-s-emogi-picker';
+import type { EmojiPickerStorage } from 'rn-expo-emoji-picker';
 
 const mmkv = new MMKV();
 const mmkvStorage: EmojiPickerStorage = {
@@ -152,7 +154,7 @@ Note: MMKV is a native module, so it requires a dev build (it won't run in Expo 
 `EmojiReactionBar` is the quick-reaction companion to the full picker — the small pill of emojis that appears when a user long-presses a message. It's a plain view: anchor it over your message bubble yourself, and wire `onOpenPicker` to present the full `EmojiPicker` (in a sheet, modal, wherever).
 
 ```tsx
-import { EmojiReactionBar } from 'rn-s-emogi-picker';
+import { EmojiReactionBar } from 'rn-expo-emoji-picker';
 
 <EmojiReactionBar
   emojis={['👍', '❤️', '😂', '😮', '😢', '🙏']}   // default set shown
@@ -193,7 +195,7 @@ Skip `KeyboardAvoidingView` here — treat the system keyboard and the emoji pan
 ```tsx
 import { Keyboard, Platform, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { EmojiPicker } from 'rn-s-emogi-picker/native';
+import { EmojiPicker } from 'rn-expo-emoji-picker/native';
 
 const [draft, setDraft] = useState('');
 const [emojiOpen, setEmojiOpen] = useState(false);
@@ -272,7 +274,7 @@ Vertical lists inside a bottom sheet fight the sheet's pan gesture on Android. I
 
 ```tsx
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { EmojiPicker } from 'rn-s-emogi-picker';
+import { EmojiPicker } from 'rn-expo-emoji-picker';
 
 <BottomSheet snapPoints={['60%']}>
   <EmojiPicker onEmojiSelected={...} ScrollComponent={BottomSheetScrollView} />
@@ -298,27 +300,13 @@ Emoji **keywords** stay in the data layer (English, from [emojilib](https://gith
 
 ## Performance
 
-Design rules this library enforces (and that you should keep in mind when wrapping it):
-
-- **Row-based grid.** The list never uses an engine's `numColumns`. Data is flattened into uniform items — `{type:'header'}` or `{type:'row', emojis:[…]}` — one item shape across engines, clean recycling pools, no per-engine column bugs.
-- **One component per row.** A row is a single `Pressable` containing plain `Text` glyphs; the tapped emoji is resolved from the touch x-position. ~2 components per row instead of one `Pressable` per cell keeps recycling re-binds (fast flings, category jumps) cheap on low-end devices. Rows are `React.memo`, fully prop-driven, and hold **no internal state** — required for recycling correctness on both engines.
-- **Stable handlers.** No inline `onPress` closures through the list; a single `useCallback` handler is passed down into rows.
-- **Uniform row height** (`emojiSize + 2 * cellPadding`) so recycled views never resize.
-- **Build-time data.** The emoji dataset (from [unicode-emoji-json](https://github.com/muan/unicode-emoji-json)) is flattened into a compact index at build time — nothing is parsed on mount. Skin-tone insertion points are precomputed, so toning is a string substitution.
-- No Reanimated or gesture-handler logic anywhere near cells.
+- **Row-based grid** — the list renders whole rows, never cells: one item shape across engines, clean recycling pools, uniform row height (`emojiSize + 2 * cellPadding`).
+- **One component per row** — a single `Pressable` of plain `Text` glyphs; the tapped emoji is resolved from the touch x-position. Rows are stateless and `React.memo`, so recycling re-binds stay cheap on low-end devices.
+- **Build-time data** — the emoji index (from [unicode-emoji-json](https://github.com/muan/unicode-emoji-json)) ships precomputed; nothing is parsed on mount, and skin toning is a string substitution.
 
 ### Native row rendering (`/native`, `/legend-native`)
 
-For apps that ship dev builds, the native entries swap the row renderer for a native view (Expo Modules API): each row of glyphs is drawn by a single `UIView` via UIKit string drawing on iOS and a single `View` via canvas text drawing on Android, instead of one `Text` per emoji. A recycled window drops from ~180 views to ~20, which raises the ceiling for fling speed and category jumps on low-end devices.
-
-- Requires the New Architecture and Expo Modules autolinking (any `expo run:*` / dev-client / EAS build — no config plugin needed).
-- In Expo Go, or any build where the module isn't linked, it **falls back to the JS rows** — with a one-time `console.warn` in development so a missing module is never mistaken for the fast path. `isNativeEmojiRowAvailable` is exported if you want to display which path is active.
-- Touch handling (tap + long-press with x-position hit testing) stays in JS either way, so behavior is identical.
-- Search and all picker logic stay in JS by design: the debounced scan over the prebuilt index runs in well under a millisecond — no native module could meaningfully improve it.
-
-### Future optimizations
-
-If profiling ever shows a remaining gap on top of native rows, the next step would be a fully native list engine (UICollectionView / RecyclerView behind the same `EmojiListEngine` contract). Keyword search stays JS on purpose — the debounced linear scan over ~2k pre-indexed entries is far below one frame, so a [Nitro module](https://nitro.margelo.com) would add complexity without measurable speed.
+In dev builds, each row is drawn by **one native view** (Expo Modules — UIKit string drawing on iOS, canvas text on Android) instead of one `Text` per emoji, dropping a recycled window from ~180 views to ~20. No config plugin needed — any `expo run:*` / dev-client / EAS build links it automatically. Where the module isn't linked (Expo Go included) it **falls back to the JS rows** with a one-time dev warning; `isNativeEmojiRowAvailable` reports which path is active. Touch handling and search stay in JS on both paths, so behavior is identical.
 
 ## Example app
 

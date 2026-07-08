@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Emogi Picker Example",
-    "slug": "rn-s-emogi-picker-example",
+    "name": "Emoji Picker Example",
+    "slug": "rn-expo-emoji-picker-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -11,11 +11,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jass08.rnsemogipickerexample",
+      "bundleIdentifier": "com.jass08.rnexpoemojipickerexample",
       "appleTeamId": "WG3G5J6V8M"
     },
     "android": {
-      "package": "com.jass08.rnsemogipickerexample"
+      "package": "com.jass08.rnexpoemojipickerexample"
     }
   }
 }

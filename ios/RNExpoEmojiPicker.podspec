@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
-  s.name           = 'RNSEmogiPicker'
+  s.name           = 'RNExpoEmojiPicker'
   s.version        = '0.1.0'
-  s.summary        = 'Native row rendering for rn-s-emogi-picker'
+  s.summary        = 'Native row rendering for rn-expo-emoji-picker'
   s.description    = 'Draws a full emoji picker row in a single UIView, replacing one Text view per glyph.'
   s.author         = 'Jass (Scanner Techs)'
-  s.homepage       = 'https://github.com/scanner-techs/rn-s-emogi-picker'
+  s.homepage       = 'https://github.com/JassiSingh08/rn-expo-emoji-picker'
   s.license        = { type: 'MIT' }
   # Must not exceed the app's deployment target (15.1 on Expo SDK 53/54) —
   # CocoaPods silently skips the module during autolinking otherwise.

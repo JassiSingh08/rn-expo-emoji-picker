@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { createInMemoryStorage, EmojiPicker, EmojiReactionBar } from 'rn-s-emogi-picker';
-import { EmojiPicker as LegendEmojiPicker } from 'rn-s-emogi-picker/legend';
+import { createInMemoryStorage, EmojiPicker, EmojiReactionBar } from 'rn-expo-emoji-picker';
+import { EmojiPicker as LegendEmojiPicker } from 'rn-expo-emoji-picker/legend';
 import {
   EmojiPicker as NativeEmojiPicker,
   isNativeEmojiRowAvailable,
-} from 'rn-s-emogi-picker/native';
-import type { EmojiCategoryKey, EmojiSelection, SkinTone } from 'rn-s-emogi-picker';
+} from 'rn-expo-emoji-picker/native';
+import type { EmojiCategoryKey, EmojiSelection, SkinTone } from 'rn-expo-emoji-picker';
 import { ChatDemo } from './src/ChatDemo';
 import { CustomSheet } from './src/CustomSheet';
 
@@ -36,12 +36,12 @@ const DEMOS: Array<{ key: Screen; title: string; subtitle: string }> = [
   {
     key: 'flashlist',
     title: 'Default picker (FlashList v2)',
-    subtitle: "import { EmojiPicker } from 'rn-s-emogi-picker'",
+    subtitle: "import { EmojiPicker } from 'rn-expo-emoji-picker'",
   },
   {
     key: 'legend',
     title: 'LegendList engine',
-    subtitle: "import { EmojiPicker } from 'rn-s-emogi-picker/legend'",
+    subtitle: "import { EmojiPicker } from 'rn-expo-emoji-picker/legend'",
   },
   {
     key: 'dark',
@@ -61,7 +61,7 @@ const DEMOS: Array<{ key: Screen; title: string; subtitle: string }> = [
   {
     key: 'native',
     title: 'Native rows (dev build)',
-    subtitle: "import from 'rn-s-emogi-picker/native' — JS fallback in Expo Go",
+    subtitle: "import from 'rn-expo-emoji-picker/native' — JS fallback in Expo Go",
   },
   {
     key: 'chat',
@@ -123,7 +123,7 @@ function AppContent() {
       <SafeAreaView style={[styles.container, { backgroundColor: bg }]}>
         <StatusBar style="auto" />
         <ScrollView contentContainerStyle={styles.home}>
-          <Text style={[styles.title, { color: fg }]}>rn-s-emogi-picker</Text>
+          <Text style={[styles.title, { color: fg }]}>rn-expo-emoji-picker</Text>
           <Text style={styles.subtitle}>
             New Architecture · swappable list engine
           </Text>

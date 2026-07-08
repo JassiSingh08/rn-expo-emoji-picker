@@ -44,7 +44,7 @@ import type {
   VariantAnchor,
 } from './types';
 
-const DEFAULT_STORAGE_KEY = 'rn-s-emogi-picker:recents';
+const DEFAULT_STORAGE_KEY = 'rn-expo-emoji-picker:recents';
 const HEADER_EXTRA_HEIGHT = 19;
 const HAND_TEMPLATE = '✋{t}';
 

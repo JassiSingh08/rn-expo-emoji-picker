@@ -1,4 +1,4 @@
-package com.rnsemogipicker
+package com.rnexpoemojipicker
 
 import android.content.Context
 import android.graphics.Canvas
@@ -57,9 +57,9 @@ class EmojiRowView(context: Context, appContext: AppContext) : ExpoView(context,
   }
 }
 
-class RNSEmogiRowModule : Module() {
+class RNExpoEmojiRowModule : Module() {
   override fun definition() = ModuleDefinition {
-    Name("RNSEmogiRow")
+    Name("RNExpoEmojiRow")
 
     View(EmojiRowView::class) {
       Prop("glyphs") { view: EmojiRowView, glyphs: List<String> ->

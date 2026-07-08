@@ -1,5 +1,5 @@
 {
-  "name": "rn-s-emogi-picker",
+  "name": "rn-expo-emoji-picker",
   "version": "0.1.0",
   "description": "Buttery-smooth emoji picker for React Native's New Architecture. 100% JS, swappable list engine: FlashList v2 by default, LegendList or FlatList via subpath imports.",
   "main": "./lib/commonjs/index.js",
@@ -97,13 +97,13 @@
   ],
   "author": "Jass <singhjassi693@gmail.com> (Scanner Techs)",
   "license": "MIT",
-  "homepage": "https://github.com/scanner-techs/rn-s-emogi-picker#readme",
+  "homepage": "https://github.com/JassiSingh08/rn-expo-emoji-picker#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scanner-techs/rn-s-emogi-picker.git"
+    "url": "git+https://github.com/JassiSingh08/rn-expo-emoji-picker.git"
   },
   "bugs": {
-    "url": "https://github.com/scanner-techs/rn-s-emogi-picker/issues"
+    "url": "https://github.com/JassiSingh08/rn-expo-emoji-picker/issues"
   },
   "peerDependencies": {
     "@legendapp/list": ">=3.0.0",

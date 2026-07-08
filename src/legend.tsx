@@ -2,7 +2,7 @@ import { createEmojiPicker } from './core/EmojiPickerCore';
 import { LegendListEngine } from './engines/legendlist';
 
 /**
- * LegendList entry point — `import { EmojiPicker } from 'rn-s-emogi-picker/legend'`.
+ * LegendList entry point — `import { EmojiPicker } from 'rn-expo-emoji-picker/legend'`.
  * Requires the New Architecture and `@legendapp/list`.
  */
 export const EmojiPicker = createEmojiPicker(LegendListEngine);

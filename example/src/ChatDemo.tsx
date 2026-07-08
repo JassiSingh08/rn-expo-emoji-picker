@@ -13,8 +13,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 // The /native entry gives the sheet's picker native rows in dev builds and
 // falls back to JS rows in Expo Go — always safe to import in an Expo app.
-import { EmojiPicker, EmojiReactionBar } from 'rn-s-emogi-picker/native';
-import type { EmojiSelection } from 'rn-s-emogi-picker/native';
+import { EmojiPicker, EmojiReactionBar } from 'rn-expo-emoji-picker/native';
+import type { EmojiSelection } from 'rn-expo-emoji-picker/native';
 import { CustomSheet } from './CustomSheet';
 
 interface Message {

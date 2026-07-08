@@ -3,7 +3,7 @@ import { NativeEmojiRow, isNativeEmojiRowAvailable } from './core/NativeEmojiRow
 import { FlashListEngine } from './engines/flashlist';
 
 /**
- * Native-rows entry point — `import { EmojiPicker } from 'rn-s-emogi-picker/native'`.
+ * Native-rows entry point — `import { EmojiPicker } from 'rn-expo-emoji-picker/native'`.
  *
  * Each row of glyphs renders as ONE native view (CoreText on iOS, canvas
  * drawing on Android) instead of one Text per emoji. Requires a dev build

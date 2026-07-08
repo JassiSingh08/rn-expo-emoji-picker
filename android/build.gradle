@@ -3,11 +3,11 @@ plugins {
   id 'expo-module-gradle-plugin'
 }
 
-group = 'com.rnsemogipicker'
+group = 'com.rnexpoemojipicker'
 version = '0.1.0'
 
 android {
-  namespace "com.rnsemogipicker"
+  namespace "com.rnexpoemojipicker"
   defaultConfig {
     versionCode 1
     versionName "0.1.0"

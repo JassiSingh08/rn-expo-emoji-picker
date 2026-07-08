@@ -1,9 +1,9 @@
 {
   "platforms": ["apple", "android"],
   "apple": {
-    "modules": ["RNSEmogiRowModule"]
+    "modules": ["RNExpoEmojiRowModule"]
   },
   "android": {
-    "modules": ["com.rnsemogipicker.RNSEmogiRowModule"]
+    "modules": ["com.rnexpoemojipicker.RNExpoEmojiRowModule"]
   }
 }

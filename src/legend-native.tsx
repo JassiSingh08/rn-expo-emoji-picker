@@ -4,7 +4,7 @@ import { LegendListEngine } from './engines/legendlist';
 
 /**
  * LegendList engine + native rows —
- * `import { EmojiPicker } from 'rn-s-emogi-picker/legend-native'`.
+ * `import { EmojiPicker } from 'rn-expo-emoji-picker/legend-native'`.
  *
  * Needs `@legendapp/list` and a dev build for the native renderer; falls
  * back to JS rows wherever the native module isn't linked (Expo Go).

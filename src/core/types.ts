@@ -143,7 +143,7 @@ export interface EmojiPickerProps {
   recentlyUsedLimit?: number;
   /** Persistence for recents. Default: shared in-memory (resets on app restart). */
   storage?: EmojiPickerStorage;
-  /** Storage key for recents. Default 'rn-s-emogi-picker:recents'. */
+  /** Storage key for recents. Default 'rn-expo-emoji-picker:recents'. */
   storageKey?: string;
   /** Show the global skin tone button next to the search bar. Default true. */
   enableSkinToneSelector?: boolean;
