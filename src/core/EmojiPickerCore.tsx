@@ -349,16 +349,17 @@ export function createEmojiPicker(
     const extraData = useMemo(() => ({ tone, theme }), [tone, theme]);
     const showEmpty = isSearching && flattened.items.length === 0;
 
-    const tabBar = (
-      <CategoryTabBar
-        categories={tabCategories}
-        activeCategory={activeCategory}
-        theme={theme}
-        strings={strings}
-        onSelect={handleSelectCategory}
-        position={categoryBarPosition}
-      />
-    );
+    const tabBar =
+      categoryBarPosition === 'hidden' ? null : (
+        <CategoryTabBar
+          categories={tabCategories}
+          activeCategory={activeCategory}
+          theme={theme}
+          strings={strings}
+          onSelect={handleSelectCategory}
+          position={categoryBarPosition}
+        />
+      );
 
     return (
       <View

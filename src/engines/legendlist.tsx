@@ -33,6 +33,7 @@ export const LegendListEngine = forwardRef<EmojiListHandle, EmojiListEngineProps
         renderItem={props.renderItem}
         keyExtractor={props.keyExtractor}
         recycleItems
+        maintainVisibleContentPosition
         estimatedItemSize={props.rowHeight}
         stickyHeaderIndices={props.stickyHeaderIndices}
         onViewableItemsChanged={props.onViewableItemsChanged}

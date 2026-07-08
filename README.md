@@ -103,7 +103,7 @@ You can even bring your own engine: `createEmojiPicker(MyEngine)` is exported, t
 | `ScrollComponent` | `ComponentType<any>` | — | Injected scroll component (bottom sheets — see below). |
 | `onCategoryChanged` | `(c: EmojiCategoryKey) => void` | — | Active category changed (scrolling or tab press). |
 | `headerRight` | `ReactNode` | — | Extra element after the search bar / tone button — e.g. a backspace key for chat inputs. |
-| `categoryBarPosition` | `'top' \| 'bottom'` | `'top'` | `'bottom'` matches system-keyboard layouts. |
+| `categoryBarPosition` | `'top' \| 'bottom' \| 'hidden'` | `'top'` | `'bottom'` matches system-keyboard layouts. `'hidden'` removes the bar entirely — recently used still appears as the top section of the list, and the list keeps its scroll position when that section grows. |
 | `excludeEmojis` | `string[]` | — | Glyphs to hide entirely (matched against the base emoji). |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `contentContainerStyle` | `StyleProp<ViewStyle>` | — | Forwarded to the list. |
@@ -184,6 +184,73 @@ import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 )}
 ```
 
+## Chat composer (emoji keyboard)
+
+The other big chat use case: the picker replaces the system keyboard, WhatsApp-style, while the input bar stays visible above it — so every tapped emoji appears in the text field immediately. The picker is a plain view, so this is just layout: put it below your composer at the keyboard's height, and toggle between it and the keyboard.
+
+Skip `KeyboardAvoidingView` here — treat the system keyboard and the emoji panel as the same thing: one slot below the composer that holds either the picker or an equal-height spacer. This works with Android edge-to-edge (where the window no longer resizes for the keyboard) and makes the keyboard ⇄ panel swap pixel-stable, because both occupy the identical height.
+
+```tsx
+import { Keyboard, Platform, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { EmojiPicker } from 'rn-s-emogi-picker/native';
+
+const [draft, setDraft] = useState('');
+const [emojiOpen, setEmojiOpen] = useState(false);
+const [keyboardShown, setKeyboardShown] = useState(false);
+const inputRef = useRef<TextInput>(null);
+const measuredKeyboard = useRef(0);
+const insets = useSafeAreaInsets();
+
+useEffect(() => {
+  // "Will" events on iOS so the spacer moves with the keyboard animation;
+  // Android only emits "Did".
+  const show = Keyboard.addListener(
+    Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+    (e) => {
+      measuredKeyboard.current = e.endCoordinates.height;
+      setKeyboardShown(true);
+      setEmojiOpen(false); // tapping the input swaps the panel back out
+    }
+  );
+  const hide = Keyboard.addListener(
+    Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+    () => setKeyboardShown(false)
+  );
+  return () => { show.remove(); hide.remove(); };
+}, []);
+
+// Your screen bottom already sits insets.bottom above the keyboard's
+// bottom edge on iOS. 320 is the fallback before the keyboard first shows.
+const panelHeight = measuredKeyboard.current
+  ? measuredKeyboard.current - (Platform.OS === 'ios' ? insets.bottom : 0)
+  : 320;
+
+const toggle = () => {
+  if (emojiOpen) {
+    setEmojiOpen(false);
+    inputRef.current?.focus();      // panel → keyboard
+  } else {
+    Keyboard.dismiss();             // keyboard → panel
+    setEmojiOpen(true);
+  }
+};
+
+<View style={{ flex: 1 }}>
+  {/* messages */}
+  <Composer inputRef={inputRef} value={draft} onChangeText={setDraft} onEmojiPress={toggle} />
+  {emojiOpen ? (
+    <View style={{ height: panelHeight }}>
+      <EmojiPicker onEmojiSelected={(e) => setDraft((d) => d + e.emoji)} />
+    </View>
+  ) : keyboardShown ? (
+    <View style={{ height: panelHeight }} />   // keeps the composer above the keyboard
+  ) : null}
+</View>
+```
+
+Don't close the panel on selection — users typically insert several emoji in a row. The example app's chat screen has the complete working version (composer + reactions together).
+
 ## Theming
 
 ```tsx
@@ -255,7 +322,7 @@ If profiling ever shows a remaining gap on top of native rows, the next step wou
 
 ## Example app
 
-[`example/`](./example) is an Expo SDK 54 app with seven screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, and a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker).
+[`example/`](./example) is an Expo SDK 54 app with seven screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, and a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker) plus a composer where 😊 swaps the keyboard for the picker while the input bar stays in view.
 
 ```sh
 npm install && npm run prepare   # build the library

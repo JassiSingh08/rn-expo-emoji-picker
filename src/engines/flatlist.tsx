@@ -66,6 +66,7 @@ export const FlatListEngine = forwardRef<EmojiListHandle, EmojiListEngineProps>(
         renderItem={props.renderItem}
         keyExtractor={props.keyExtractor}
         getItemLayout={getItemLayout}
+        maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
         onViewableItemsChanged={props.onViewableItemsChanged}
         viewabilityConfig={VIEWABILITY_CONFIG}
         renderScrollComponent={renderScrollComponent}

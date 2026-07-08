@@ -165,8 +165,13 @@ export interface EmojiPickerProps {
    * bar and skin tone button — e.g. a backspace key for chat inputs.
    */
   headerRight?: ReactNode;
-  /** Where the category tab bar sits. Default 'top'; 'bottom' matches system keyboards. */
-  categoryBarPosition?: 'top' | 'bottom';
+  /**
+   * Where the category tab bar sits. Default 'top'; 'bottom' matches system
+   * keyboards; 'hidden' removes it (recently used still appears as the top
+   * section of the list, and the list keeps its scroll position when that
+   * section grows).
+   */
+  categoryBarPosition?: 'top' | 'bottom' | 'hidden';
   /** Glyphs to hide entirely, matched against the base (untoned) emoji. */
   excludeEmojis?: string[];
   style?: StyleProp<ViewStyle>;
