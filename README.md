@@ -6,7 +6,7 @@
 
 Buttery-smooth emoji picker for React Native, built for the **New Architecture** with a **swappable list engine** (FlashList v2 by default, LegendList or FlatList via subpath imports) and an optional **native row renderer** for dev builds.
 
-Works in **any New-Architecture React Native app — Expo is not required**. The name reflects the first-class Expo support: the native row renderer is an Expo Module, and every entry degrades gracefully in Expo Go.
+Works in any New-Architecture React Native app — **with or without Expo** (see [Using without Expo](#using-without-expo-bare-react-native)).
 
 > ⚠️ **This library requires the React Native New Architecture.** Expo SDK 53 and 54 enable it by default, so most apps need to do nothing. The default FlashList v2 engine is itself New-Arch-only.
 
@@ -32,6 +32,18 @@ npm install rn-expo-emoji-picker @legendapp/list
 `@shopify/flash-list` and `@legendapp/list` are **optional peer dependencies** — install only the one that matches the entry point you import. The `/flatlist` entry point needs neither. The native row renderer ships **inside this package** (Expo Modules) — nothing extra to install; it links automatically in any dev build when you import a `/native` entry.
 
 Requirements: `react >= 19`, `react-native >= 0.79` (Expo SDK 53/54), New Architecture enabled.
+
+### Using without Expo (bare React Native)
+
+The picker's core is pure JS — in a bare React Native app, install and import exactly as above and everything works.
+
+The optional **native row renderer** is an Expo Module, so it needs the Expo Modules runtime in your app. One-time setup:
+
+```sh
+npx install-expo-modules
+```
+
+After that, the `/native` and `/legend-native` entries link automatically on the next build. Without it they still work — they detect the missing module and fall back to the JS rows (with a one-time `console.warn` in development).
 
 ## Quick start
 
