@@ -16,6 +16,7 @@ import {
   isNativeEmojiRowAvailable,
 } from 'rn-expo-emoji-picker/native';
 import type { EmojiCategoryKey, EmojiSelection, SkinTone } from 'rn-expo-emoji-picker';
+import { BenchmarkScreen } from './src/BenchmarkScreen';
 import { ChatDemo } from './src/ChatDemo';
 import { CustomSheet } from './src/CustomSheet';
 
@@ -27,7 +28,8 @@ type Screen =
   | 'sheet'
   | 'kitchen'
   | 'native'
-  | 'chat';
+  | 'chat'
+  | 'benchmark';
 
 // Stable across remounts so the "Frequent" section survives navigation.
 const kitchenStorage = createInMemoryStorage();
@@ -67,6 +69,11 @@ const DEMOS: Array<{ key: Screen; title: string; subtitle: string }> = [
     key: 'chat',
     title: 'Chat reactions (EmojiReactionBar)',
     subtitle: 'long-press a message → quick bar → ＋ opens the full picker',
+  },
+  {
+    key: 'benchmark',
+    title: 'Row benchmark (JS vs native)',
+    subtitle: 'same list, same data — measure scroll FPS and jump latency',
   },
 ];
 
@@ -197,6 +204,8 @@ function AppContent() {
       )}
 
       {screen === 'chat' && <ChatDemo />}
+
+      {screen === 'benchmark' && <BenchmarkScreen />}
 
       {screen === 'kitchen' && (
         <>

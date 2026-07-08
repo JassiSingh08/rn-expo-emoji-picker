@@ -320,9 +320,20 @@ Emoji **keywords** stay in the data layer (English, from [emojilib](https://gith
 
 In dev builds, each row is drawn by **one native view** (Expo Modules — UIKit string drawing on iOS, canvas text on Android) instead of one `Text` per emoji, dropping a recycled window from ~180 views to ~20. No config plugin needed — any `expo run:*` / dev-client / EAS build links it automatically. Where the module isn't linked (Expo Go included) it **falls back to the JS rows** with a one-time dev warning; `isNativeEmojiRowAvailable` reports which path is active. Touch handling and search stay in JS on both paths, so behavior is identical.
 
+#### Measured difference
+
+**Release build**, 4-year-old Android phone, identical FlashList and data (238 rows / 1,904 emoji), auto-fling at 4× finger speed. Reproduce it yourself with the example app's benchmark screen:
+
+| | JS rows | Native rows | |
+| --- | --- | --- | --- |
+| Scroll — JS FPS (avg / min) | 11.9 / 10.7 | **58.4 / 58.2** | **~5× faster** |
+| Full-list jump — paint (avg / max) | 349 / 382 ms | 312 / 332 ms | ~10% faster |
+
+The honest read: on flagship devices both paths hold 60fps — the native renderer is for the low-end half of your user base, where JS row re-binding starves the JS thread under fast flings. Cold jumps improve only ~10% because mounting a fresh window of rows dominates either way.
+
 ## Example app
 
-[`example/`](./example) is an Expo SDK 54 app with seven screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, and a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker) plus a composer where 😊 swaps the keyboard for the picker while the input bar stays in view.
+[`example/`](./example) is an Expo SDK 54 app with eight screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker) plus a composer where 😊 swaps the keyboard for the picker while the input bar stays in view, and the JS-vs-native **row benchmark** behind the numbers above.
 
 ```sh
 npm install && npm run prepare   # build the library
