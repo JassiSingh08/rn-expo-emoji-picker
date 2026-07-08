@@ -14,6 +14,7 @@ Buttery-smooth emoji picker for React Native, built for the **New Architecture**
 - 🎨 Full theming (light/dark/auto + theme object), i18n-ready strings
 - 🖐 Skin tones: global selector + per-emoji variants on long-press (controlled or uncontrolled)
 - 🕘 Recently / frequently used, persisted through an injectable storage adapter
+- 💬 `EmojiReactionBar` — WhatsApp-style quick reaction bar companion, with selected-state highlights and a ＋ hook into the full picker
 - 🔍 Debounced keyword search over a **build-time prebuilt index** (nothing parsed at runtime)
 - 📑 Category tab bar with sticky section headers and scroll-position highlighting
 - 📱 Plays nicely inside `@gorhom/bottom-sheet` via an injectable `ScrollComponent`
@@ -101,10 +102,13 @@ You can even bring your own engine: `createEmojiPicker(MyEngine)` is exported, t
 | `onSkinToneChange` | `(tone: SkinTone) => void` | — | Fires from the global selector. |
 | `ScrollComponent` | `ComponentType<any>` | — | Injected scroll component (bottom sheets — see below). |
 | `onCategoryChanged` | `(c: EmojiCategoryKey) => void` | — | Active category changed (scrolling or tab press). |
+| `headerRight` | `ReactNode` | — | Extra element after the search bar / tone button — e.g. a backspace key for chat inputs. |
+| `categoryBarPosition` | `'top' \| 'bottom'` | `'top'` | `'bottom'` matches system-keyboard layouts. |
+| `excludeEmojis` | `string[]` | — | Glyphs to hide entirely (matched against the base emoji). |
 | `style` | `StyleProp<ViewStyle>` | — | Container style. |
 | `contentContainerStyle` | `StyleProp<ViewStyle>` | — | Forwarded to the list. |
 
-Long-pressing any emoji that supports skin tones opens its per-emoji variant popover; picking a variant does not change the global tone.
+Long-pressing any emoji that supports skin tones opens an anchored variant popover directly above the pressed cell (WhatsApp/Gboard style, flipping below near the top edge); picking a variant does not change the global tone.
 
 ### How `maxEmojiVersion: 'auto'` decides
 
@@ -142,6 +146,43 @@ const mmkvStorage: EmojiPickerStorage = {
 ```
 
 Note: MMKV is a native module, so it requires a dev build (it won't run in Expo Go). The picker itself stays JS-only either way — the native dependency lives in *your* app, not in this library.
+
+## Reaction bar (chat apps)
+
+`EmojiReactionBar` is the quick-reaction companion to the full picker — the small pill of emojis that appears when a user long-presses a message. It's a plain view: anchor it over your message bubble yourself, and wire `onOpenPicker` to present the full `EmojiPicker` (in a sheet, modal, wherever).
+
+```tsx
+import { EmojiReactionBar } from 'rn-s-emogi-picker';
+
+<EmojiReactionBar
+  emojis={['👍', '❤️', '😂', '😮', '😢', '🙏']}   // default set shown
+  selectedEmojis={myReactionsForThisMessage}       // rendered highlighted
+  onEmojiSelected={(e) => toggleReaction(e.emoji)} // same EmojiSelection payload
+  onOpenPicker={() => setSheetOpen(true)}          // renders the ＋ button
+/>
+```
+
+Props: `emojis`, `selectedEmojis`, `onEmojiSelected`, `onOpenPicker`, `colorScheme`, `theme`, `emojiSize`, `style`. Tapping an already-selected emoji fires `onEmojiSelected` again — treat it as "remove reaction". The example app's chat screen shows the full flow.
+
+The bar ships **without any animation or positioning opinion** — it's a plain view, so your app owns both. Anchor it over the message via a wrapper, and animate with whatever your app already uses. With Reanimated (entering **and** exiting both work, since your wrapper owns mount/unmount):
+
+```tsx
+import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
+
+{barVisible && (
+  <Animated.View
+    entering={FadeInUp.springify()}
+    exiting={FadeOut}
+    style={{ position: 'absolute', top: bubbleY - 52, left: 16 }}
+  >
+    <EmojiReactionBar
+      selectedEmojis={reactions}
+      onEmojiSelected={(e) => toggleReaction(e.emoji)}
+      onOpenPicker={openSheet}
+    />
+  </Animated.View>
+)}
+```
 
 ## Theming
 
@@ -214,7 +255,7 @@ If profiling ever shows a remaining gap on top of native rows, the next step wou
 
 ## Example app
 
-[`example/`](./example) is an Expo SDK 54 app with six screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme, the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, custom strings/theme/storage, 9 columns), and the native row renderer (`/native`) with a badge showing whether the native path is active.
+[`example/`](./example) is an Expo SDK 54 app with seven screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, and a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker).
 
 ```sh
 npm install && npm run prepare   # build the library

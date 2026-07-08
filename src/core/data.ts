@@ -11,6 +11,7 @@ function slugify(name: string): string {
 // Decoded exactly once at module load — never per mount.
 const byCategory = new Map<EmojiDataCategoryKey, EmojiItem[]>();
 const bySlug = new Map<string, EmojiItem>();
+const byGlyph = new Map<string, EmojiItem>();
 
 for (const group of EMOJI_DATA.groups) {
   const items: EmojiItem[] = [];
@@ -30,6 +31,7 @@ for (const group of EMOJI_DATA.groups) {
     };
     items.push(item);
     bySlug.set(slug, item);
+    byGlyph.set(item.emoji, item);
   }
   byCategory.set(group.key, items);
 }
@@ -44,4 +46,9 @@ export function getEmojisForCategory(key: EmojiDataCategoryKey): EmojiItem[] {
 
 export function getEmojiBySlug(slug: string): EmojiItem | undefined {
   return bySlug.get(slug);
+}
+
+/** Look up by the base (untoned) glyph, e.g. '👍'. */
+export function getEmojiByGlyph(glyph: string): EmojiItem | undefined {
+  return byGlyph.get(glyph);
 }

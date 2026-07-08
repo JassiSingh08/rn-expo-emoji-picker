@@ -9,16 +9,25 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { createInMemoryStorage, EmojiPicker } from 'rn-s-emogi-picker';
+import { createInMemoryStorage, EmojiPicker, EmojiReactionBar } from 'rn-s-emogi-picker';
 import { EmojiPicker as LegendEmojiPicker } from 'rn-s-emogi-picker/legend';
 import {
   EmojiPicker as NativeEmojiPicker,
   isNativeEmojiRowAvailable,
 } from 'rn-s-emogi-picker/native';
 import type { EmojiCategoryKey, EmojiSelection, SkinTone } from 'rn-s-emogi-picker';
+import { ChatDemo } from './src/ChatDemo';
 import { CustomSheet } from './src/CustomSheet';
 
-type Screen = 'home' | 'flashlist' | 'legend' | 'dark' | 'sheet' | 'kitchen' | 'native';
+type Screen =
+  | 'home'
+  | 'flashlist'
+  | 'legend'
+  | 'dark'
+  | 'sheet'
+  | 'kitchen'
+  | 'native'
+  | 'chat';
 
 // Stable across remounts so the "Frequent" section survives navigation.
 const kitchenStorage = createInMemoryStorage();
@@ -37,7 +46,7 @@ const DEMOS: Array<{ key: Screen; title: string; subtitle: string }> = [
   {
     key: 'dark',
     title: 'Dark theme + custom accent',
-    subtitle: 'colorScheme="dark" with a theme override',
+    subtitle: 'theme override + oversized tabs (watch the bar auto-scroll)',
   },
   {
     key: 'sheet',
@@ -47,12 +56,17 @@ const DEMOS: Array<{ key: Screen; title: string; subtitle: string }> = [
   {
     key: 'kitchen',
     title: 'Kitchen sink (every prop)',
-    subtitle: 'controlled skin tone, custom strings/theme/storage, 9 columns',
+    subtitle: 'controlled tone, erase key, bottom tab bar, excluded emoji, 9 cols',
   },
   {
     key: 'native',
     title: 'Native rows (dev build)',
     subtitle: "import from 'rn-s-emogi-picker/native' — JS fallback in Expo Go",
+  },
+  {
+    key: 'chat',
+    title: 'Chat reactions (EmojiReactionBar)',
+    subtitle: 'long-press a message → quick bar → ＋ opens the full picker',
   },
 ];
 
@@ -165,6 +179,9 @@ function AppContent() {
               categoryActiveBackground: 'rgba(255,45,85,0.22)',
             },
             emojiSize: 30,
+            // Oversized on purpose: overflows the bar so the active tab
+            // auto-scrolls into view while you scroll the grid.
+            categoryBarIconSize: 34,
           }}
         />
       )}
@@ -178,6 +195,8 @@ function AppContent() {
           <NativeEmojiPicker onEmojiSelected={handleSelected} />
         </>
       )}
+
+      {screen === 'chat' && <ChatDemo />}
 
       {screen === 'kitchen' && (
         <>
@@ -233,6 +252,18 @@ function AppContent() {
             onSkinToneChange={setKitchenTone}
             ScrollComponent={ScrollView}
             onCategoryChanged={setKitchenCategory}
+            headerRight={
+              <Pressable
+                onPress={() => setSelection(null)}
+                style={styles.eraseButton}
+                accessibilityRole="button"
+                accessibilityLabel="erase"
+              >
+                <Text style={styles.eraseText}>⌫</Text>
+              </Pressable>
+            }
+            categoryBarPosition="bottom"
+            excludeEmojis={['🖕']}
             style={styles.kitchenPicker}
             contentContainerStyle={styles.kitchenContent}
           />
@@ -347,6 +378,16 @@ const styles = StyleSheet.create({
   },
   kitchenContent: {
     paddingBottom: 24,
+  },
+  eraseButton: {
+    backgroundColor: 'rgba(52,199,89,0.10)',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  eraseText: {
+    fontSize: 18,
+    color: '#1C1C1E',
   },
   openButton: {
     backgroundColor: '#007AFF',

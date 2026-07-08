@@ -52,6 +52,8 @@ export interface CategoryTabBarProps {
   theme: EmojiPickerTheme;
   strings: EmojiPickerStrings;
   onSelect: (category: EmojiCategoryKey) => void;
+  /** Divider sits on the side facing the grid. */
+  position?: 'top' | 'bottom';
 }
 
 export const CategoryTabBar = memo(function CategoryTabBar({
@@ -60,6 +62,7 @@ export const CategoryTabBar = memo(function CategoryTabBar({
   theme,
   strings,
   onSelect,
+  position = 'top',
 }: CategoryTabBarProps) {
   const scrollRef = useRef<ScrollView>(null);
   // Geometry lives in refs — layout events must never re-render the bar.
@@ -101,11 +104,10 @@ export const CategoryTabBar = memo(function CategoryTabBar({
   return (
     <View
       style={[
-        styles.bar,
-        {
-          backgroundColor: theme.colors.categoryBarBackground,
-          borderBottomColor: theme.colors.divider,
-        },
+        { backgroundColor: theme.colors.categoryBarBackground },
+        position === 'top'
+          ? { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: theme.colors.divider }
+          : { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: theme.colors.divider },
       ]}
     >
       <ScrollView
@@ -135,9 +137,6 @@ export const CategoryTabBar = memo(function CategoryTabBar({
 });
 
 const styles = StyleSheet.create({
-  bar: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
   content: {
     flexGrow: 1,
     justifyContent: 'space-evenly',

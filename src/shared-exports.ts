@@ -1,4 +1,7 @@
 export { createEmojiPicker } from './core/EmojiPickerCore';
+export { EmojiReactionBar } from './core/EmojiReactionBar';
+export type { EmojiReactionBarProps } from './core/EmojiReactionBar';
+export { getEmojiByGlyph, getEmojiBySlug } from './core/data';
 export { darkTheme, lightTheme } from './core/theme';
 export { defaultStrings } from './core/strings';
 export { createInMemoryStorage } from './core/storage';

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRowTouch } from './rowTouch';
 import { displayEmoji } from './skinTone';
-import type { EmojiCategoryKey, EmojiItem, SkinTone } from './types';
+import type { EmojiCategoryKey, EmojiItem, SkinTone, VariantAnchor } from './types';
 
 export interface EmojiRowProps {
   emojis: EmojiItem[];
@@ -12,7 +12,11 @@ export interface EmojiRowProps {
   emojiSize: number;
   skinTone: SkinTone;
   onPress: (item: EmojiItem, category: EmojiCategoryKey) => void;
-  onLongPress: (item: EmojiItem, category: EmojiCategoryKey) => void;
+  onLongPress: (
+    item: EmojiItem,
+    category: EmojiCategoryKey,
+    anchor: VariantAnchor
+  ) => void;
 }
 
 /**

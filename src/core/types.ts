@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 /** Category keys as stored in the generated dataset. */
@@ -37,6 +37,12 @@ export interface EmojiItem {
   version: number;
   keywords: string;
   toneTemplate: string | null;
+}
+
+/** Long-press anchor in screen (page) coordinates: cell center X, row top Y. */
+export interface VariantAnchor {
+  x: number;
+  y: number;
 }
 
 export type SkinTone =
@@ -154,6 +160,15 @@ export interface EmojiPickerProps {
   ScrollComponent?: ComponentType<any>;
   /** Fired when the active category changes while scrolling. */
   onCategoryChanged?: (category: EmojiCategoryKey) => void;
+  /**
+   * Extra element rendered at the end of the header row, after the search
+   * bar and skin tone button — e.g. a backspace key for chat inputs.
+   */
+  headerRight?: ReactNode;
+  /** Where the category tab bar sits. Default 'top'; 'bottom' matches system keyboards. */
+  categoryBarPosition?: 'top' | 'bottom';
+  /** Glyphs to hide entirely, matched against the base (untoned) emoji. */
+  excludeEmojis?: string[];
   style?: StyleProp<ViewStyle>;
   /** contentContainerStyle forwarded to the list. */
   contentContainerStyle?: StyleProp<ViewStyle>;

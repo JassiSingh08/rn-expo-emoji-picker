@@ -3,28 +3,33 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { displayEmoji, SKIN_TONES } from './skinTone';
 import type { EmojiItem, EmojiPickerTheme, SkinTone } from './types';
 
+const ARROW = 7;
+const EDGE_MARGIN = 8;
+
 interface VariantCellProps {
   item: EmojiItem;
   tone: SkinTone;
-  emojiSize: number;
+  fontSize: number;
+  width: number;
   onSelect: (item: EmojiItem, tone: SkinTone) => void;
 }
 
 const VariantCell = memo(function VariantCell({
   item,
   tone,
-  emojiSize,
+  fontSize,
+  width,
   onSelect,
 }: VariantCellProps) {
   const handlePress = useCallback(() => onSelect(item, tone), [onSelect, item, tone]);
   return (
     <Pressable
       onPress={handlePress}
-      style={styles.variant}
+      style={[styles.variant, { width }]}
       accessibilityRole="button"
       accessibilityLabel={`${item.name}, ${tone.replace(/_/g, ' ')}`}
     >
-      <Text style={{ fontSize: emojiSize }} allowFontScaling={false}>
+      <Text style={{ fontSize }} allowFontScaling={false}>
         {displayEmoji(item, tone)}
       </Text>
     </Pressable>
@@ -34,82 +39,126 @@ const VariantCell = memo(function VariantCell({
 export interface VariantOverlayProps {
   item: EmojiItem;
   theme: EmojiPickerTheme;
+  /** Pressed cell center / row top, in picker-container coordinates. */
+  anchorX: number;
+  anchorY: number;
+  containerWidth: number;
+  rowHeight: number;
   onSelect: (item: EmojiItem, tone: SkinTone) => void;
   onDismiss: () => void;
 }
 
-/** Per-emoji skin tone variants, opened by long-pressing a cell. */
+/**
+ * Anchored tone popover: a bubble with the six variants attached directly
+ * to the long-pressed cell (WhatsApp/Gboard style), clamped to the picker's
+ * edges and flipped below the row when there is no room above. The backdrop
+ * is transparent — no modal dimming.
+ */
 export const VariantOverlay = memo(function VariantOverlay({
   item,
   theme,
+  anchorX,
+  anchorY,
+  containerWidth,
+  rowHeight,
   onSelect,
   onDismiss,
 }: VariantOverlayProps) {
+  const fontSize = theme.emojiSize + 2;
+  const cellWidth = fontSize + 14;
+  const bubbleWidth = SKIN_TONES.length * cellWidth + 12;
+  const bubbleHeight = fontSize + 20;
+
+  const left = Math.max(
+    EDGE_MARGIN,
+    Math.min(anchorX - bubbleWidth / 2, containerWidth - bubbleWidth - EDGE_MARGIN)
+  );
+  const topAbove = anchorY - bubbleHeight - ARROW - 2;
+  const flipBelow = topAbove < EDGE_MARGIN;
+  const top = flipBelow ? anchorY + rowHeight + ARROW + 2 : topAbove;
+  const arrowLeft = Math.max(
+    left + 10,
+    Math.min(anchorX - ARROW, left + bubbleWidth - 10 - ARROW * 2)
+  );
+
   return (
-    <Pressable
-      style={[styles.backdrop, { backgroundColor: theme.colors.overlayBackdrop }]}
-      onPress={onDismiss}
-      accessibilityRole="button"
-      accessibilityLabel="dismiss"
-    >
+    <View style={StyleSheet.absoluteFill}>
+      <Pressable
+        style={StyleSheet.absoluteFill}
+        onPress={onDismiss}
+        accessibilityRole="button"
+        accessibilityLabel="dismiss"
+      />
       <View
-        style={[styles.card, { backgroundColor: theme.colors.overlaySurface }]}
-        // Keep taps on the card from falling through to the backdrop.
-        onStartShouldSetResponder={() => true}
+        style={[
+          styles.bubble,
+          {
+            left,
+            top,
+            width: bubbleWidth,
+            height: bubbleHeight,
+            borderRadius: bubbleHeight / 2,
+            backgroundColor: theme.colors.overlaySurface,
+          },
+        ]}
       >
-        <Text
-          style={[styles.name, { color: theme.colors.secondaryText }]}
-          numberOfLines={1}
-        >
-          {item.name}
-        </Text>
-        <View style={styles.variants}>
-          {SKIN_TONES.map((tone) => (
-            <VariantCell
-              key={tone}
-              item={item}
-              tone={tone}
-              emojiSize={theme.emojiSize + 4}
-              onSelect={onSelect}
-            />
-          ))}
-        </View>
+        {SKIN_TONES.map((tone) => (
+          <VariantCell
+            key={tone}
+            item={item}
+            tone={tone}
+            fontSize={fontSize}
+            width={cellWidth}
+            onSelect={onSelect}
+          />
+        ))}
       </View>
-    </Pressable>
+      <View
+        style={[
+          styles.arrow,
+          flipBelow
+            ? { top: top - ARROW, borderBottomColor: theme.colors.overlaySurface }
+            : { top: top + bubbleHeight, borderTopColor: theme.colors.overlaySurface },
+          { left: arrowLeft },
+          flipBelow ? styles.arrowUp : styles.arrowDown,
+        ]}
+      />
+    </View>
   );
 });
 
 const styles = StyleSheet.create({
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
+  bubble: {
+    position: 'absolute',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 10,
-  },
-  card: {
-    borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    marginHorizontal: 16,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 6,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
     elevation: 8,
   },
-  name: {
-    fontSize: 12,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-    textAlign: 'center',
-    marginBottom: 6,
-  },
-  variants: {
-    flexDirection: 'row',
-  },
   variant: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  arrow: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: ARROW,
+    borderRightWidth: ARROW,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    // Android draws shadows per-view; the arrow must not cast its own.
+    elevation: 8,
+  },
+  arrowDown: {
+    borderTopWidth: ARROW,
+  },
+  arrowUp: {
+    borderBottomWidth: ARROW,
   },
 });

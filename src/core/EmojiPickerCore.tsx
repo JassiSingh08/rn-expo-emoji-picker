@@ -41,6 +41,7 @@ import type {
   EmojiItem,
   EmojiPickerProps,
   SkinTone,
+  VariantAnchor,
 } from './types';
 
 const DEFAULT_STORAGE_KEY = 'rn-s-emogi-picker:recents';
@@ -80,6 +81,9 @@ export function createEmojiPicker(
       onSkinToneChange,
       ScrollComponent,
       onCategoryChanged,
+      headerRight,
+      categoryBarPosition = 'top',
+      excludeEmojis,
       style,
       contentContainerStyle,
     } = props;
@@ -137,20 +141,25 @@ export function createEmojiPicker(
     // --- data ---
     const resolvedMaxVersion =
       maxEmojiVersion === 'auto' ? DEVICE_MAX_EMOJI_VERSION : maxEmojiVersion;
+    const excludeSet = useMemo(
+      () => (excludeEmojis?.length ? new Set(excludeEmojis) : null),
+      [excludeEmojis]
+    );
     const baseSections = useMemo<CategorySection[]>(() => {
       const order = categories ?? DATA_CATEGORY_ORDER;
       return order.map((key) => {
         const all = getEmojisForCategory(key);
-        return {
-          category: key,
-          title: strings.categories[key],
-          emojis:
-            resolvedMaxVersion == null
-              ? all
-              : all.filter((e) => e.version <= resolvedMaxVersion),
-        };
+        const emojis =
+          resolvedMaxVersion == null && excludeSet == null
+            ? all
+            : all.filter(
+                (e) =>
+                  (resolvedMaxVersion == null || e.version <= resolvedMaxVersion) &&
+                  !excludeSet?.has(e.emoji)
+              );
+        return { category: key, title: strings.categories[key], emojis };
       });
-    }, [categories, resolvedMaxVersion, strings]);
+    }, [categories, resolvedMaxVersion, excludeSet, strings]);
 
     const searchableItems = useMemo(
       () => baseSections.flatMap((s) => s.emojis),
@@ -259,15 +268,30 @@ export function createEmojiPicker(
       [emitSelection]
     );
 
+    const containerRef = useRef<View>(null);
+    const [containerWidth, setContainerWidth] = useState(0);
+    const handleContainerLayout = useCallback(
+      (e: { nativeEvent: { layout: { width: number } } }) => {
+        setContainerWidth(e.nativeEvent.layout.width);
+      },
+      []
+    );
+
     const [variant, setVariant] = useState<{
       item: EmojiItem;
       category: EmojiCategoryKey;
+      x: number;
+      y: number;
     } | null>(null);
     const variantRef = useRef(variant);
     variantRef.current = variant;
     const handleEmojiLongPress = useCallback(
-      (item: EmojiItem, category: EmojiCategoryKey) => {
-        setVariant({ item, category });
+      (item: EmojiItem, category: EmojiCategoryKey, anchor: VariantAnchor) => {
+        // Anchor arrives in page coordinates; the popover positions inside
+        // the picker container, so convert before storing.
+        containerRef.current?.measureInWindow((cx, cy) => {
+          setVariant({ item, category, x: anchor.x - cx, y: anchor.y - cy });
+        });
       },
       []
     );
@@ -325,11 +349,24 @@ export function createEmojiPicker(
     const extraData = useMemo(() => ({ tone, theme }), [tone, theme]);
     const showEmpty = isSearching && flattened.items.length === 0;
 
+    const tabBar = (
+      <CategoryTabBar
+        categories={tabCategories}
+        activeCategory={activeCategory}
+        theme={theme}
+        strings={strings}
+        onSelect={handleSelectCategory}
+        position={categoryBarPosition}
+      />
+    );
+
     return (
       <View
+        ref={containerRef}
+        onLayout={handleContainerLayout}
         style={[styles.container, { backgroundColor: theme.colors.background }, style]}
       >
-        {(enableSearch || enableSkinToneSelector) && (
+        {(enableSearch || enableSkinToneSelector || headerRight != null) && (
           <View style={styles.topRow}>
             {enableSearch && (
               <SearchBar
@@ -358,6 +395,7 @@ export function createEmojiPicker(
                 </Text>
               </Pressable>
             )}
+            {headerRight}
           </View>
         )}
         {toneSelectorOpen && (
@@ -367,13 +405,7 @@ export function createEmojiPicker(
             onSelect={handleToneSelected}
           />
         )}
-        <CategoryTabBar
-          categories={tabCategories}
-          activeCategory={activeCategory}
-          theme={theme}
-          strings={strings}
-          onSelect={handleSelectCategory}
-        />
+        {categoryBarPosition === 'top' && tabBar}
         <View style={styles.listWrap}>
           {showEmpty ? (
             <View style={styles.empty}>
@@ -399,10 +431,15 @@ export function createEmojiPicker(
             />
           )}
         </View>
+        {categoryBarPosition === 'bottom' && tabBar}
         {variant && (
           <VariantOverlay
             item={variant.item}
             theme={theme}
+            anchorX={variant.x}
+            anchorY={variant.y}
+            containerWidth={containerWidth}
+            rowHeight={rowHeight}
             onSelect={handleVariantSelect}
             onDismiss={dismissVariant}
           />
