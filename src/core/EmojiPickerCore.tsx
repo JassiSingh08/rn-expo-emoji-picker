@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react';
 import {
   Pressable,
@@ -15,7 +16,10 @@ import {
 import { CategoryHeader } from './CategoryHeader';
 import { CategoryTabBar } from './CategoryTabBar';
 import { DATA_CATEGORY_ORDER, getEmojisForCategory } from './data';
-import { DEVICE_MAX_EMOJI_VERSION } from './deviceEmojiVersion';
+import {
+  getDeviceEmojiSupport,
+  subscribeDeviceEmojiSupport,
+} from './deviceEmojiVersion';
 import { EmojiRow } from './EmojiRow';
 import { flattenSections, flattenSearchResults } from './rows';
 import type { ComponentType } from 'react';
@@ -139,8 +143,13 @@ export function createEmojiPicker(
     );
 
     // --- data ---
-    const resolvedMaxVersion =
-      maxEmojiVersion === 'auto' ? DEVICE_MAX_EMOJI_VERSION : maxEmojiVersion;
+    const deviceSupport = useSyncExternalStore(
+      subscribeDeviceEmojiSupport,
+      getDeviceEmojiSupport
+    );
+    const auto = maxEmojiVersion === 'auto';
+    const resolvedMaxVersion = auto ? deviceSupport.maxVersion : maxEmojiVersion;
+    const unsupported = auto ? deviceSupport.unsupported : null;
     const excludeSet = useMemo(
       () => (excludeEmojis?.length ? new Set(excludeEmojis) : null),
       [excludeEmojis]
@@ -150,16 +159,17 @@ export function createEmojiPicker(
       return order.map((key) => {
         const all = getEmojisForCategory(key);
         const emojis =
-          resolvedMaxVersion == null && excludeSet == null
+          resolvedMaxVersion == null && excludeSet == null && unsupported == null
             ? all
             : all.filter(
                 (e) =>
                   (resolvedMaxVersion == null || e.version <= resolvedMaxVersion) &&
+                  !unsupported?.has(e.emoji) &&
                   !excludeSet?.has(e.emoji)
               );
         return { category: key, title: strings.categories[key], emojis };
       });
-    }, [categories, resolvedMaxVersion, excludeSet, strings]);
+    }, [categories, resolvedMaxVersion, unsupported, excludeSet, strings]);
 
     const searchableItems = useMemo(
       () => baseSections.flatMap((s) => s.emojis),

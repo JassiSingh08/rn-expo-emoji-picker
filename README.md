@@ -128,11 +128,11 @@ Long-pressing any emoji that supports skin tones opens an anchored variant popov
 
 The dataset ships everything through **Emoji 17.0** (Unicode 17.0, 2025). What a device can *render* depends on its OS:
 
-- **Android 12+ (API 31+)**: shows **everything** — the emoji font updates through Google Play system updates, independent of the OS version.
-- **Android 11 / 10 / older**: capped at Emoji 13 / 12 / 11 respectively.
+- **Android with the native module linked** (any dev build — whichever entry point you import): the picker asks the device's emoji font which glyphs it can actually draw (`Paint.hasGlyph`, the same check EmojiCompat uses) and hides the rest. This catches Samsung and other OEM fonts, and Play-updated fonts that are ahead of the OS. It runs once per app launch on a native background thread, so the picker never waits for it, and only checks the ~350 emoji newer than Emoji 5.0.
+- **Android without it** (Expo Go): capped at the version the OS release shipped — Android 16 → 16, 15 → 15.1, 14 → 15, 13 → 14, 12 → 13.1, 11 → 13, 10 → 12, older → 11. A device with a newer font misses a few recent emoji rather than showing tofu.
 - **iOS**: capped by the OS point release that shipped each emoji set (iOS 26.4 → all, 18.4 → 16, 17.4 → 15.1, 16.4 → 15, 15.4 → 14, 14.2 → 13, older → 12).
 
-The detected value is exported as `DEVICE_MAX_EMOJI_VERSION` (`detectMaxEmojiVersion()`) if you want it for your own UI.
+The OS-version value is exported as `DEVICE_MAX_EMOJI_VERSION` (`detectMaxEmojiVersion()`) if you want it for your own UI.
 
 ## Persisting recently used
 
