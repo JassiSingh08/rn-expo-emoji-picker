@@ -1,5 +1,6 @@
 # rn-expo-emoji-picker
 
+[![npm version](https://img.shields.io/npm/v/rn-expo-emoji-picker.svg)](https://www.npmjs.com/package/rn-expo-emoji-picker)
 [![New Architecture Only](https://img.shields.io/badge/New%20Architecture-required-blue)](https://reactnative.dev/architecture/landing-page)
 [![Expo SDK 53+](https://img.shields.io/badge/Expo-SDK%2053%2B-lightgrey)](https://expo.dev)
 [![MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
