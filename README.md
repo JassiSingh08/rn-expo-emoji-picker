@@ -331,7 +331,7 @@ In dev builds, each row is drawn by **one native view** (Expo Modules — UIKit 
 
 ## Example app
 
-[`example/`](./example) is an Expo SDK 54 app with eight screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker) plus a composer where 😊 swaps the keyboard for the picker while the input bar stays in view, and the JS-vs-native **row benchmark** behind the numbers above.
+[`example/`](./example) is an Expo SDK 57 app with eight screens: the default FlashList picker, the LegendList engine (`/legend`), a dark custom theme (with oversized tabs demonstrating the auto-scrolling category bar), the picker inside a custom bottom sheet, a kitchen-sink screen exercising every prop (controlled skin tone, `headerRight` erase key, bottom category bar, excluded emoji, 9 columns), the native row renderer (`/native`) with a badge showing whether the native path is active, a chat screen demoing `EmojiReactionBar` (long-press a message → quick bar → ＋ opens the full picker) plus a composer where 😊 swaps the keyboard for the picker while the input bar stays in view, and the JS-vs-native **row benchmark** behind the numbers above.
 
 ```sh
 npm install && npm run prepare   # build the library
