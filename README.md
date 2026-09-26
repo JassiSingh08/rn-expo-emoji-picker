@@ -1,16 +1,16 @@
 # rn-expo-emoji-picker
 
 [![New Architecture Only](https://img.shields.io/badge/New%20Architecture-required-blue)](https://reactnative.dev/architecture/landing-page)
-[![Expo SDK 53 / 54](https://img.shields.io/badge/Expo-SDK%2053%20%2F%2054-lightgrey)](https://expo.dev)
+[![Expo SDK 53+](https://img.shields.io/badge/Expo-SDK%2053%2B-lightgrey)](https://expo.dev)
 [![MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 Buttery-smooth emoji picker for React Native, built for the **New Architecture** with a **swappable list engine** (FlashList v2 by default, LegendList or FlatList via subpath imports) and an optional **native row renderer** for dev builds.
 
 Works in any New-Architecture React Native app — **with or without Expo** (see [Using without Expo](#using-without-expo-bare-react-native)).
 
-> ⚠️ **This library requires the React Native New Architecture.** Expo SDK 53 and 54 enable it by default, so most apps need to do nothing. The default FlashList v2 engine is itself New-Arch-only.
+> ⚠️ **This library requires the React Native New Architecture.** Expo SDK 53 and later enable it by default, so most apps need to do nothing. The default FlashList v2 engine is itself New-Arch-only.
 
-- 🚀 100% JavaScript core — **zero required native modules**, works in Expo Go (SDK 53/54) and any dev build
+- 🚀 100% JavaScript core — **zero required native modules**, works in Expo Go (SDK 53+) and any dev build
 - ⚡ Optional **native row renderer** (`/native` entry, Expo Modules) — one native view per row for maximum scroll/jump throughput in dev builds, automatic JS fallback in Expo Go
 - 🔁 Swappable list engine behind one adapter contract; install only the engine you use
 - 🎨 Full theming (light/dark/auto + theme object), i18n-ready strings
@@ -31,7 +31,7 @@ npm install rn-expo-emoji-picker @legendapp/list
 
 `@shopify/flash-list` and `@legendapp/list` are **optional peer dependencies** — install only the one that matches the entry point you import. The `/flatlist` entry point needs neither. The native row renderer ships **inside this package** (Expo Modules) — nothing extra to install; it links automatically in any dev build when you import a `/native` entry.
 
-Requirements: `react >= 19`, `react-native >= 0.79` (Expo SDK 53/54), New Architecture enabled.
+Requirements: `react >= 19`, `react-native >= 0.79` (Expo SDK 53+), New Architecture enabled.
 
 ### Using without Expo (bare React Native)
 
