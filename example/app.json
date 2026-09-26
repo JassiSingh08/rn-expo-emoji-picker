@@ -16,6 +16,17 @@
     },
     "android": {
       "package": "com.jass08.rnexpoemojipickerexample"
-    }
+    },
+    "plugins": [
+      "expo-status-bar",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ]
+    ]
   }
 }
