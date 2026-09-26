@@ -1,6 +1,6 @@
 {
   "name": "rn-expo-emoji-picker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Buttery-smooth emoji picker for React Native's New Architecture — swappable list engine (FlashList v2 / LegendList / FlatList), optional native row renderer via Expo Modules, skin tones, recents, reaction bar.",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
