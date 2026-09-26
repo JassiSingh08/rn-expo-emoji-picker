@@ -61,6 +61,15 @@ class RNExpoEmojiRowModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("RNExpoEmojiRow")
 
+    // Same check EmojiCompat uses: true only if the whole sequence (ZWJ,
+    // skin tone, flag) draws as one glyph, so a half-supported sequence
+    // that would render as pieces counts as missing. Async because the
+    // first call loads the emoji font (50-200ms cold).
+    AsyncFunction("missingGlyphs") { glyphs: List<String> ->
+      val paint = Paint()
+      glyphs.filterNot { paint.hasGlyph(it) }
+    }
+
     View(EmojiRowView::class) {
       Prop("glyphs") { view: EmojiRowView, glyphs: List<String> ->
         view.glyphs = glyphs

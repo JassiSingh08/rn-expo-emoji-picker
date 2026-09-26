@@ -124,10 +124,11 @@ export interface EmojiPickerProps {
   categories?: EmojiDataCategoryKey[];
   /**
    * Hide emoji introduced after this Unicode Emoji version so unsupported
-   * glyphs never render as tofu boxes. Default 'auto': detect what the
-   * device supports from its OS version (Android 12+ and iOS 26.4+ show
-   * everything, older OSes get capped). Pass a number (e.g. 12) to pin a
-   * version, or null to always show everything.
+   * glyphs never render as tofu boxes. Default 'auto': on iOS, and on
+   * Android without the native module, cap by OS version; on Android with
+   * the native module linked, ask the device font which emoji it can draw.
+   * Pass a number (e.g. 12) to pin a version, or null to always show
+   * everything.
    */
   maxEmojiVersion?: number | null | 'auto';
   /** 'auto' follows the system appearance. Default 'auto'. */
